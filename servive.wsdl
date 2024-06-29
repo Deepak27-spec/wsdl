@@ -1,0 +1,187 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" 
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+             targetNamespace="http://happytimesoft.com/onvif/service"
+             xmlns:tns="http://happytimesoft.com/onvif/service">
+
+  <!-- Define the data types used in the service -->
+  <types>
+    <xsd:schema targetNamespace="http://happytimesoft.com/onvif/service">
+      <xsd:element name="Config">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="server_ip" type="xsd:string"/>
+            <xsd:element name="http_enable" type="xsd:boolean"/>
+            <xsd:element name="http_port" type="xsd:int"/>
+            <xsd:element name="https_enable" type="xsd:boolean"/>
+            <xsd:element name="https_port" type="xsd:int"/>
+            <xsd:element name="cert_file" type="xsd:string"/>
+            <xsd:element name="key_file" type="xsd:string"/>
+            <xsd:element name="http_max_users" type="xsd:int"/>
+            <xsd:element name="need_auth" type="xsd:boolean"/>
+            <xsd:element name="log_enable" type="xsd:boolean"/>
+            <xsd:element name="log_level" type="xsd:int"/>
+            <xsd:element name="information" type="tns:Information"/>
+            <xsd:element name="users" type="tns:Users"/>
+            <xsd:element name="profiles" type="tns:Profiles"/>
+            <xsd:element name="scopes" type="tns:Scopes"/>
+            <xsd:element name="event" type="tns:Event"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      
+      <xsd:complexType name="Information">
+        <xsd:sequence>
+          <xsd:element name="Manufacturer" type="xsd:string"/>
+          <xsd:element name="Model" type="xsd:string"/>
+          <xsd:element name="FirmwareVersion" type="xsd:string"/>
+          <xsd:element name="SerialNumber" type="xsd:string"/>
+          <xsd:element name="HardwareId" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="User">
+        <xsd:sequence>
+          <xsd:element name="username" type="xsd:string"/>
+          <xsd:element name="password" type="xsd:string"/>
+          <xsd:element name="userlevel" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="Users">
+        <xsd:sequence>
+          <xsd:element name="user" type="tns:User" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="VideoSource">
+        <xsd:sequence>
+          <xsd:element name="width" type="xsd:int"/>
+          <xsd:element name="height" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="VideoEncoder">
+        <xsd:sequence>
+          <xsd:element name="width" type="xsd:int"/>
+          <xsd:element name="height" type="xsd:int"/>
+          <xsd:element name="quality" type="xsd:int"/>
+          <xsd:element name="session_timeout" type="xsd:int"/>
+          <xsd:element name="framerate" type="xsd:int"/>
+          <xsd:element name="encoding_interval" type="xsd:int"/>
+          <xsd:element name="bitrate_limit" type="xsd:int"/>
+          <xsd:element name="encoding" type="xsd:string"/>
+          <xsd:element name="h264" type="tns:H264"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="H264">
+        <xsd:sequence>
+          <xsd:element name="gov_length" type="xsd:int"/>
+          <xsd:element name="h264_profile" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="AudioEncoder">
+        <xsd:sequence>
+          <xsd:element name="session_timeout" type="xsd:int"/>
+          <xsd:element name="sample_rate" type="xsd:int"/>
+          <xsd:element name="bitrate" type="xsd:int"/>
+          <xsd:element name="encoding" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="Profile">
+        <xsd:sequence>
+          <xsd:element name="video_source" type="tns:VideoSource"/>
+          <xsd:element name="video_encoder" type="tns:VideoEncoder"/>
+          <xsd:element name="audio_source" type="xsd:string"/>
+          <xsd:element name="audio_encoder" type="tns:AudioEncoder"/>
+          <xsd:element name="stream_uri" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="Profiles">
+        <xsd:sequence>
+          <xsd:element name="profile" type="tns:Profile" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="Scope">
+        <xsd:sequence>
+          <xsd:element name="scope" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="Scopes">
+        <xsd:sequence>
+          <xsd:element name="scope" type="tns:Scope" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="Event">
+        <xsd:sequence>
+          <xsd:element name="renew_interval" type="xsd:int"/>
+          <xsd:element name="simulate_enable" type="xsd:boolean"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </types>
+
+  <!-- Define the messages used by the service -->
+  <message name="GetConfigRequest">
+    <part name="parameters" element="tns:GetConfigRequest"/>
+  </message>
+  <message name="GetConfigResponse">
+    <part name="parameters" element="tns:Config"/>
+  </message>
+
+  <message name="SetConfigRequest">
+    <part name="parameters" element="tns:Config"/>
+  </message>
+  <message name="SetConfigResponse">
+    <part name="parameters" element="tns:SetConfigResponse"/>
+  </message>
+
+  <!-- Define the port type for the service -->
+  <portType name="ConfigServicePortType">
+    <operation name="GetConfig">
+      <input message="tns:GetConfigRequest"/>
+      <output message="tns:GetConfigResponse"/>
+    </operation>
+    <operation name="SetConfig">
+      <input message="tns:SetConfigRequest"/>
+      <output message="tns:SetConfigResponse"/>
+    </operation>
+  </portType>
+
+  <!-- Define the binding for the service -->
+  <binding name="ConfigServiceBinding" type="tns:ConfigServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="GetConfig">
+      <soap:operation soapAction="http://happytimesoft.com/onvif/service/GetConfig"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="SetConfig">
+      <soap:operation soapAction="http://happytimesoft.com/onvif/service/SetConfig"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <!-- Define the service -->
+  <service name="ConfigService">
+    <port name="ConfigServicePort" binding="tns:ConfigServiceBinding">
+      <soap:address location="http://example.com/onvif/service"/>
+    </port>
+  </service>
+</definitions>
